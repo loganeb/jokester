@@ -10,8 +10,8 @@ import android.content.Intent
 import android.os.Build
 import android.widget.*
 import androidx.annotation.RequiresApi
-
-import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private  lateinit var alarmTimePicker: TimePicker
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 cal.get(Calendar.DAY_OF_MONTH),
                 alarmTimePicker.getHour(),
                 alarmTimePicker.getMinute(),
-                0);
+        0);
         cal.set(Calendar.SECOND, 0)
         Alarm_set(cal.timeInMillis)
     }
@@ -45,8 +45,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         var intent = Intent(this, Alarm::class.java)
         var pendingIntent: PendingIntent = PendingIntent.getBroadcast(this,0,intent,0)
+        var nextAlarm = findViewById<TextView>(R.id.nextAlarm)
+        var dateStringFormatter = SimpleDateFormat("EEE, MMM d, yyyy hh:mm:ss")
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+        nextAlarm.setText("Next Alarm: " + dateStringFormatter.format(Date(timeInMillis)))
         Toast.makeText(this, "Your Alarm is set.", Toast.LENGTH_SHORT).show()
     }
 
@@ -54,8 +57,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         var intent = Intent(this, Alarm::class.java)
         var pendingIntent: PendingIntent = PendingIntent.getBroadcast(this,0,intent,0)
+        var nextAlarm = findViewById<TextView>(R.id.nextAlarm)
         alarmManager.cancel(pendingIntent);
         Toast.makeText(this,"Your Alarm is Cancelled",Toast.LENGTH_SHORT).show();
+        nextAlarm.setText("Next alarm: disabled")
     }
 
 

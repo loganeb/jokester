@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.provider.Settings;
+import android.util.Log;
 
 public class Alarm extends BroadcastReceiver {
     private MediaPlayer mp = null;
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("Alarm","Alarm broadcast receiver triggered.");
         if(mp != null && mp.isPlaying()){
             mp.stop();
             mp.release();
